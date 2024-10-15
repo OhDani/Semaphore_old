@@ -1,7 +1,5 @@
 #include <errno.h>
-
 #include <random>
-
 #include "common.h"
 #include "stb_image_write.h"
 
@@ -23,20 +21,6 @@ int main(int argc, char **argv) {
 
     shma4.requestComplete();
     shma4.waitForResponse();
-
-    size_t bytes = 4 * sizeof(uint64_t);
-    uint64_t imageBytes[4];
-    std::memcpy(imageBytes, shma4.getHeader(bytes), bytes);
-
-    std::cout << "I'm receiving " << imageBytes[0] << " bytes, "
-              << imageBytes[1] << "x" << imageBytes[2] << std::endl;
-
-    // the data is already jpeg encoded binary data, so we can directly dump it
-    // to disk
-    unsigned char *image = (unsigned char *)shma4.getData(imageBytes[0]);
-    std::string filename = command + ".jpg";
-    stbi_write_jpg(filename.c_str(), imageBytes[1], imageBytes[2],
-                   imageBytes[3], image, 90);
   }
 
   return 0;
